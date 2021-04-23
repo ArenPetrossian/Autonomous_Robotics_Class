@@ -1,0 +1,12 @@
+#Ignore everything
+*
+
+#Except for
+!.gitignore
+!state_machine
+!state_machine/**
+!README.md
+
+#make sure u dont include mac stuff
+.DS_Store
+.directory
