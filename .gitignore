@@ -5,6 +5,14 @@
 !.gitignore
 !state_machine
 !state_machine/**
+!computer_vision
+!computer_vision/**
+!sensing_and_actuation
+!sensing_and_actuation/**
+!graphical_user_interface
+!graphical_user_interface/**
+!guidance_navigation_control
+!guidance_navigation_control/**
 !README.md
 
 #make sure u dont include mac stuff
