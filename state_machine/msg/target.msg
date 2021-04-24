@@ -1,0 +1,12 @@
+boolean buoy1
+float32 buoy1x
+float32 buoy1y
+float32 buoy1_distance
+boolean buoy2
+float32 buoy2x
+float32 buoy2y
+float32 buoy2_distance
+boolean buoy3
+float32 buoy3x
+float32 buoy3y
+float32 buoy3_distance
