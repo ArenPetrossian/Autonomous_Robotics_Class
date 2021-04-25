@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ai_class</name>
+  <name>state_machine</name>
   <version>0.0.0</version>
-  <description>The ai_class package</description>
+  <description>The state_machine package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

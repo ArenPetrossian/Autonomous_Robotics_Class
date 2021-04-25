@@ -1,4 +1,4 @@
-boolean stabilized
+bool stabilized
 float32 yaw_current
 float32 pitch_current
 float32 roll_current
