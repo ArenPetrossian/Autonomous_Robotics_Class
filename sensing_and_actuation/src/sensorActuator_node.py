@@ -7,7 +7,7 @@ def gnc_data(gnc_data):
 	print (gnc_data)
 
 while True:
-	rospy.init_node('sensors_actuators')
+	rospy.init_node('SENSORS_ACTUATORS')
 	sensorActuator_pub = rospy.Publisher('sensorInfo_actuatorStatus', sensorInfo_actuatorStatus, queue_size=10)
 	rospy.Subscriber('controlCommand', controlCommand, gnc_data)
 	rate = rospy.Rate(10)

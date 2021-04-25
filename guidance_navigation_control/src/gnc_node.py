@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 import rospy
-from state_machine.msg import task_desiredAction
+from guidance_navigation_control.msg import task_desiredAction
 from guidance_navigation_control.msg import controlCommand
 
 def smach_data(smach_data):

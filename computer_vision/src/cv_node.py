@@ -3,7 +3,7 @@ import rospy
 from computer_vision.msg import target
 
 while True:
-	rospy.init_node('computer_vision')
+	rospy.init_node('CV')
 	cv_pub = rospy.Publisher('target', target, queue_size=10)
 	rate = rospy.Rate(10)
 	final_message = target()

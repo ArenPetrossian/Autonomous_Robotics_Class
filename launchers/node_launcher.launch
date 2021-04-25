@@ -1,0 +1,13 @@
+<launch>
+
+	<node pkg="computer_vision" type="cv_node.py" name="CV" />
+
+	<node pkg="graphical_user_interface" type="gui_node.py" name="GUI" />
+
+	<node pkg="guidance_navigation_control" type="gnc_node.py" name="GNC" />
+
+	<node pkg="sensing_and_actuation" type="sensorActuator_node.py" name="SENSORS_ACTUATORS" />
+
+	<node pkg="state_machine" type="smach_node.py" name="SMACH" />
+
+</launch>

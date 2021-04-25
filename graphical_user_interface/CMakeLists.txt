@@ -8,7 +8,7 @@ project(graphical_user_interface)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  state_machine
+  guidance_navigation_control
   sensing_and_actuation
   message_generation
   message_runtime
