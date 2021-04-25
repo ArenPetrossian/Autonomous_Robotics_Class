@@ -8,6 +8,7 @@ project(sensing_and_actuation)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  guidance_navigation_control
   message_generation
   roscpp
   rospy
