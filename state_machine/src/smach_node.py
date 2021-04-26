@@ -1,20 +1,25 @@
 #! /usr/bin/env python
 import rospy
 from computer_vision.msg import target
-from sensing_and_actuation.msg import sensorInfo_actuatorStatus
-from state_machine.msg import task_desiredAction
+from guidance_navigation_control.msg import sensorInfo_actuatorStatus
+from guidance_navigation_control.msg import task_desiredAction
+from guidance_navigation_control.msg import controlCommand
 
 def cv_data(cv_data):
-        print(cv_data)
+        print (cv_data)
 
 def sensor_data(sensor_data):
 	print (sensor_data)
+
+def gnc_feedback(gnc_feedback):
+	print (gnc_feedback)
 
 while True:
 	rospy.init_node('SMACH')
 	smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 	rospy.Subscriber('target', target, cv_data)
 	rospy.Subscriber('sensorInfo_actuatorStatus', sensorInfo_actuatorStatus, sensor_data)
+        rospy.Subscriber('controlCommand', controlCommand, gnc_feedback)
 	rate = rospy.Rate(10)
 	final_message = task_desiredAction()
 	while not rospy.is_shutdown():

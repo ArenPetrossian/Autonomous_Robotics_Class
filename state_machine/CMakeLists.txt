@@ -9,7 +9,6 @@ project(state_machine)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   computer_vision
-  sensing_and_actuation
   guidance_navigation_control
   message_generation
   roscpp

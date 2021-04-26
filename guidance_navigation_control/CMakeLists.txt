@@ -51,7 +51,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
    FILES
    controlCommand.msg
-   task_desiredAction.msg 
+   task_desiredAction.msg
+   sensorInfo_actuatorStatus.msg
  )
 
 ## Generate services in the 'srv' folder

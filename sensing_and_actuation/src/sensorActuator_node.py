@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import rospy
 from guidance_navigation_control.msg import controlCommand
-from sensing_and_actuation.msg import  sensorInfo_actuatorStatus
+from guidance_navigation_control.msg import  sensorInfo_actuatorStatus
 
 def gnc_data(gnc_data):
 	print (gnc_data)

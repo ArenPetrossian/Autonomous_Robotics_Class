@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import rospy
 from guidance_navigation_control.msg import task_desiredAction
-from sensing_and_actuation.msg import sensorInfo_actuatorStatus
+from guidance_navigation_control.msg import sensorInfo_actuatorStatus
 
 def task_data(task_data):
         print(task_data)

@@ -9,9 +9,7 @@ project(graphical_user_interface)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   guidance_navigation_control
-  sensing_and_actuation
   message_generation
-  message_runtime
   roscpp
   rospy
   std_msgs
