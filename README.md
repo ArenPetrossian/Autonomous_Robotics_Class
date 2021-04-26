@@ -1,10 +1,10 @@
-Instructions on how to install the packages and set everything up goes here
+# How to Install this Repository
 
-mkdir ai_class_ws/src/  
-cd ai_class_ws  
-catkin_make  
+1. mkdir ai_class_ws/src/  
+2. cd ai_class_ws  
+3. catkin_make  
 
-Remove src/ folder  
-Download all the code  
-Rename downloaded folder to src/  
-catkin_make  
+*Remove **src/** folder*  
+*Download all the code*  
+*Rename downloaded folder to **src/** *  
+4. catkin_make  
