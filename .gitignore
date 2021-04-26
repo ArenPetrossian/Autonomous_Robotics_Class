@@ -18,6 +18,7 @@
 !launchers/
 !launchers/**
 !README.md
+!rqt_graph.png
 
 #make sure u dont include mac stuff
 .DS_Store
