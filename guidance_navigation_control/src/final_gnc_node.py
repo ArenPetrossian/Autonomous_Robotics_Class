@@ -47,10 +47,24 @@ class Guidance_Navigation_Control():
 
 	def bumpIntoBuoy(self):
 		print("bumping")
-		self.setpoints.pitch_set = 100
-		self.setpoints.roll_set = 45
+		#Forwards
+		self.setpoints.distance_set = 5
 		gnc_pub.publish(self.setpoints)
-		sleep(2.5)
+		sleep(4)
+		#Stop
+		self.setpoints.distance_set = 0
+		gnc_pub.publish(self.setpoints)
+		sleep(1)
+		#Backwards
+		self.setpoints.distance_set = -5
+                gnc_pub.publish(self.setpoints)
+                sleep(4)
+		#Stop
+		self.setpoints.distance_set = 0
+		gnc_pub.publish(self.setpoints)
+		sleep(1)
+		self.setpoints.final_command = True
+		gnc_pub.publish(self.setpoints)
 
 
 def main_loop():
