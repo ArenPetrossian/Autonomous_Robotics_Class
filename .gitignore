@@ -20,6 +20,10 @@
 !README.md
 !rqt_graph.png
 
+#Temporarily ignore while I edit these
+graphical_user_interface/src/graphicalUserInterface/
+graphical_user_interface/src/graphicalUserInterface/**
+
 #make sure u dont include mac stuff
 .DS_Store
 .directory
