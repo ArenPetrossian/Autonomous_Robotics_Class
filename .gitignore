@@ -23,6 +23,11 @@
 #Temporarily ignore while I edit these
 graphical_user_interface/src/graphicalUserInterface/
 graphical_user_interface/src/graphicalUserInterface/**
+state_machine/src/CenterWithBuoy.py
+state_machine/src/SearchForBuoy.py
+
+#Ignore all .pyc files for now
+*.pyc
 
 #make sure u dont include mac stuff
 .DS_Store

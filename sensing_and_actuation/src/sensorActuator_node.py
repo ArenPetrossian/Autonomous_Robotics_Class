@@ -19,6 +19,7 @@ while True:
 		final_message.thruster_values[0] = 1600
                 final_message.thruster_values[1] = 1300
                 final_message.thruster_values[2] = 1700
+		final_message.stabilized = True
 		sensorActuator_pub.publish(final_message)
 		rate.sleep()
 
