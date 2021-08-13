@@ -21,6 +21,7 @@ while True:
 		final_message.yaw_set = 2
                 final_message.pitch_set = 5
 		final_message.depth_set = 10
+		final_message.final_command = True
 		gnc_pub.publish(final_message)
 		rate.sleep()
 

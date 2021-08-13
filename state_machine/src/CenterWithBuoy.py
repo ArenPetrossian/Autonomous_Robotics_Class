@@ -6,7 +6,6 @@ import time
 from computer_vision.msg import target
 from guidance_navigation_control.msg import sensorInfo_actuatorStatus
 from guidance_navigation_control.msg import task_desiredAction
-from guidance_navigation_control.msg import controlCommand
 from Subscriber import Subscribe_to
 
 
@@ -53,7 +52,6 @@ class CenterWithBuoy(smach.State):
 			time.sleep(0.01)
 			if (self.counter > 6000):
 				return 'Failed'
-		print("no")
 		return 'Failed'
 
 	def center(self):
