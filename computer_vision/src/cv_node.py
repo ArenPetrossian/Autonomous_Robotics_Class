@@ -9,8 +9,8 @@ while True:
 	final_message = target()
 	while not rospy.is_shutdown():
 		final_message.buoy1 = True
-                final_message.buoy1x = 6.2
-		final_message.buoy1y = 4.8
+                final_message.buoy1x = 4.1
+		final_message.buoy1y = 0.1
 		final_message.buoy1_distance = 14
 		cv_pub.publish(final_message)
 		rate.sleep()
