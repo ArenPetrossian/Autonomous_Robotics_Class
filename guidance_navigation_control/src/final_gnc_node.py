@@ -30,7 +30,9 @@ class Guidance_Navigation_Control():
 			print("data_updated")
 			self.smach_data = self.smach_sub.get_data()
 			self.sensors_data = self.sensors_sub.get_data()
-			if (self.smach_data.bumpIntoBuoy):
+			if (self.smach_data.surface):
+				self.surface()
+			elif (self.smach_data.bumpIntoBuoy):
 				self.bumpIntoBuoy()
 			self.update_setpoints()
 			gnc_pub.publish(self.setpoints)
@@ -43,6 +45,17 @@ class Guidance_Navigation_Control():
 		self.setpoints.roll_set = self.smach_data.roll_set + self.sensors_data.roll_current
 		self.setpoints.depth_set = self.smach_data.depth_set + self.sensors_data.depth_current
 		self.setpoints.distance_set = self.smach_data.distance_set
+
+
+	def surface(self):
+		print("surfacing")
+		self.setpoints.yaw_set = self.sensors_data.yaw_current
+		self.setpoints.pitch_set, self.setpoints.roll_set = 0, 0
+		self.setpoints.distance_set, self.setpoints.depth_set = 0, 0
+		self.setpoints.final_command = True
+		gnc_pub.publish(self.setpoints)
+		sleep(10)
+		exit()
 
 
 	def bumpIntoBuoy(self):

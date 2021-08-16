@@ -34,6 +34,7 @@ while True:
 		if userdata == 0:
 			final_message.bumpIntoBuoy = False
 		else:
+			final_message.surface = True
 			final_message.bumpIntoBuoy = True
 		smach_pub.publish(final_message)
 		final_message.bumpIntoBuoy = False
