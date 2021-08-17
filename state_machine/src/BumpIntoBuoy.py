@@ -9,13 +9,11 @@ from guidance_navigation_control.msg import controlCommand
 from Subscriber import Subscribe_to
 
 
-rospy.init_node('sm')
-smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
-
 class BumpIntoBuoy(smach.State):
 	def __init__(self):
 		print("bumping")
 		smach.State.__init__(self, outcomes=['Success', 'Failed'])
+		self.smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 		self.sensors_sub = Subscribe_to('sensorInfo_actuatorStatus')
 		self.gnc_sub = Subscribe_to('controlCommand')
 		self.task = task_desiredAction()
@@ -24,7 +22,7 @@ class BumpIntoBuoy(smach.State):
 
 	def execute(self, userdata):
 		self.task.bumpIntoBuoy = True
-		smach_pub.publish(self.task)
+		self.smach_pub.publish(self.task)
 		while True:
 			self.sensors_data = self.sensors_sub.get_data()
 			self.gnc_data = self.gnc_sub.get_data()
@@ -52,6 +50,6 @@ def code():
 
 
 if __name__ == '__main__':
-        code()
+	code()
 
 

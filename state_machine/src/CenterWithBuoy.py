@@ -9,13 +9,11 @@ from guidance_navigation_control.msg import task_desiredAction
 from Subscriber import Subscribe_to
 
 
-rospy.init_node('sm')
-smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
-
 class CenterWithBuoy(smach.State):
 	def __init__(self):
 		print("centering")
 		smach.State.__init__(self, outcomes=['Success', 'Failed'])
+		self.smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 		self.cv_sub = Subscribe_to('target')
 		self.sensors_sub = Subscribe_to('sensorInfo_actuatorStatus')
 		self.task = task_desiredAction()
@@ -33,7 +31,7 @@ class CenterWithBuoy(smach.State):
 			if ((abs(self.cv_data.buoy1x) < 5) and (abs(self.cv_data.buoy1y) < 0.1524)):
 				self.task.yaw_set = 0
 				self.task.depth_set = 0
-				smach_pub.publish(self.task)
+				self.smach_pub.publish(self.task)
 				if (self.sensors_data.stabilized):
 					self.centered = True
 			else:
@@ -42,10 +40,10 @@ class CenterWithBuoy(smach.State):
 			if self.centered:
 				#Center 1 meter from the Buoy
 				self.task.distance_set = self.cv_data.buoy1_distance - 1
-				smach_pub.publish(self.task)
+				self.smach_pub.publish(self.task)
 				if (abs(self.cv_data.buoy1_distance) < 0.1524):
 					self.task.distance_set = 0
-					smach_pub.publish(self.task)
+					self.smach_pub.publish(self.task)
 					if (self.sensors_data.stabilized):
 						return 'Success'
 			self.counter = self.counter + 1
@@ -60,7 +58,7 @@ class CenterWithBuoy(smach.State):
 		#In case we become uncentered
 		if not (self.centered):
 			self.task.distance_set = 0
-		smach_pub.publish(self.task)
+		self.smach_pub.publish(self.task)
 
 
 def code():
@@ -78,6 +76,6 @@ def code():
 
 
 if __name__ == '__main__':
-        code()
+	code()
 
 

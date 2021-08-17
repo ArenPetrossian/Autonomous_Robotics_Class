@@ -11,7 +11,7 @@ while True:
 		final_message.buoy1 = True
                 final_message.buoy1x = 4.1
 		final_message.buoy1y = 0.1
-		final_message.buoy1_distance = 14
+		final_message.buoy1_distance = 0.13
 		cv_pub.publish(final_message)
 		rate.sleep()
 

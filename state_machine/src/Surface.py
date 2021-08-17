@@ -7,20 +7,18 @@ from guidance_navigation_control.msg import task_desiredAction
 from Subscriber import Subscribe_to
 
 
-rospy.init_node('sm')
-smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
-
 class Surface(smach.State):
 	def __init__(self):
 		print("surfacing")
 		smach.State.__init__(self, outcomes=['Success', 'Failed'])
+		self.smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 		self.task = task_desiredAction()
 		time.sleep(0.1)
 
 	def execute(self, userdata):
 		#Need bool since depth adds to current not absolute
 		self.task.surface = True
-		smach_pub.publish(self.task)
+		self.smach_pub.publish(self.task)
 		time.sleep(5)
 		return 'Success'
 		#Is there a way to know we surfaced for sure
@@ -41,6 +39,5 @@ def code():
 
 
 if __name__ == '__main__':
-        code()
-
+	code()
 

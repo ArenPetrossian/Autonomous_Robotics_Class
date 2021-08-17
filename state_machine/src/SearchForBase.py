@@ -9,14 +9,11 @@ from guidance_navigation_control.msg import sensorInfo_actuatorStatus
 from Subscriber import Subscribe_to
 
 
-rospy.init_node('sm')
-smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
-
-
 class SearchForBase(smach.State):
 	def __init__(self):
 		print("searching2")
 		smach.State.__init__(self, outcomes=['Success', 'Failed'])
+		self.smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 		self.cv_sub = Subscribe_to('target')
 		self.sensors_sub = Subscribe_to('sensorInfo_actuatorStatus')
 		self.counter = 0
@@ -27,7 +24,7 @@ class SearchForBase(smach.State):
 		#Turn 180
 		print("Turn 180")
 		self.task.yaw_set = 180
-		smach_pub.publish(self.task)
+		self.smach_pub.publish(self.task)
 		time.sleep(0.5)
 		self.sensors_data = self.sensors_sub.get_data()
 		while not self.sensors_data.stabilized:
@@ -42,7 +39,7 @@ class SearchForBase(smach.State):
 		self.counter = 0
 		self.task.yaw_set = 0
 		self.task.distance_set = 5
-		smach_pub.publish(self.task)
+		self.smach_pub.publish(self.task)
 		self.cv_data = self.cv_sub.get_data()
 		while not (self.cv_data.buoy3):
 			time.sleep(0.01)
@@ -53,7 +50,7 @@ class SearchForBase(smach.State):
 
 		print("Home Buoy Found")
 		self.task.distance_set = 0
-		smach_pub.publish(self.task)
+		self.smach_pub.publish(self.task)
 		return 'Success'
 
 
@@ -72,6 +69,6 @@ def code():
 
 
 if __name__ == '__main__':
-        code()
+	code()
 
 

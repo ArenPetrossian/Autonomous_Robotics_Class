@@ -6,9 +6,6 @@ from guidance_navigation_control.msg import sensorInfo_actuatorStatus
 from Subscriber import Subscribe_to
 from time import sleep
 
-rospy.init_node('GNC')
-gnc_pub = rospy.Publisher('controlCommand', controlCommand, queue_size=10)
-
 
 class Guidance_Navigation_Control():
 	def __init__(self):
@@ -19,8 +16,13 @@ class Guidance_Navigation_Control():
 
 
 	def data_received(self):
-		if (self.smach_sub.was_data_sent() and self.sensors_sub.was_data_sent()):
-			return True
+		if (self.sensors_sub.was_data_sent()):
+			if (self.smach_sub.was_data_sent()):
+				return True
+			else:
+				self.setpoints.distance_set = 0
+				gnc_pub.publish(self.setpoints)
+				return False
 		return False
 
 
@@ -95,4 +97,8 @@ def main_loop():
 
 
 if __name__ == '__main__':
+	rospy.init_node('GNC')
+	gnc_pub = rospy.Publisher('controlCommand', controlCommand, queue_size=10)
+
 	main_loop()
+
