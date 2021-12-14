@@ -53,11 +53,13 @@ double barometer_input, barometer_output, barometer_setpoint;
 double X_angle_input, X_angle_output, X_angle_setpoint;
 double Y_angle_input, Y_angle_output, Y_angle_setpoint;
 double Z_angle_input, Z_angle_output, Z_angle_setpoint;
+double temp_input;
+unsigned long lastUnstable = 0;
 
 double H_distance_kP = 1;            //****
 double H_distance_kI = 0;            //****
 double H_distance_kD = 0;            //****
-double barometer_kP = 400;           //****   400 might be too high
+double barometer_kP = 300;           //****   400 might be too high
 double barometer_kI = 0;             //****
 double barometer_kD = 0;             //****
 
@@ -128,7 +130,7 @@ void setup() {
   nh.advertise(sensorInfo_actuatorStatus);
   nh.subscribe(sub);
   InitializeIMU();
-  InitializeBarometer();
+  //InitializeBarometer();
   InitializeControls();
 
   delay(5000);
@@ -139,7 +141,8 @@ void setup() {
 //Plugs IMU angle into PID and moves Thrusters
 void loop() {
   IMU_XYZ_angles();
-  Barometer_Reading();
+  //Barometer_Reading();
+  Publisher_data();
   sensorInfo_actuatorStatus.publish(&final_message);
   nh.spinOnce();
 }
@@ -212,6 +215,7 @@ void IMU_XYZ_angles() {
   X_angle_input = euler.x();    // our X is yaw
   Y_angle_input = euler.y();    // our Y is pitch
   Z_angle_input = euler.z();    // our Z is roll
+  temp_input = bno.getTemp();
 //  Serial.print(X_angle_input);
 //  Serial.print("----");
 //  Serial.print(Y_angle_input);
@@ -244,6 +248,41 @@ void Barometer_Reading() {
    Serial.print(sensor.altitude()); 
    Serial.println(" m above mean sea level");
 */
+}
+
+
+
+//Updates Variables for Publisher 
+void Publisher_data() {
+  final_message.stabilized = isStabilized();
+  final_message.yaw_current = X_angle_input;
+  final_message.pitch_current = Y_angle_input;
+  final_message.roll_current = Z_angle_input;
+  final_message.depth_current = barometer_input;
+  final_message.temperature = temp_input;
+  final_message.thruster_values[0] = final_left_thruster_value;
+  final_message.thruster_values[1] = final_right_thruster_value;
+  final_message.thruster_values[2] = final_front_left_thruster_value;
+  final_message.thruster_values[3] = final_front_right_thruster_value;
+  final_message.thruster_values[4] = final_back_left_thruster_value;
+  final_message.thruster_values[5] = final_back_right_thruster_value;
+}
+
+
+
+//Checks if Robot is Stabilized
+bool isStabilized() {
+  if ((abs(X_angle_setpoint - X_angle_input) < 5) && (abs(Y_angle_setpoint - Y_angle_input) < 5) &&
+      (abs(Z_angle_setpoint - Z_angle_input) < 5) && (abs(barometer_setpoint - barometer_input) < 0.1524) &&
+      (H_distance_setpoint == 0)) 
+      {
+        if ((millis() - lastUnstable) > 3000) {
+          return true;
+        }
+        return false;
+      }
+  lastUnstable = millis();
+  return false;
 }
 
 
