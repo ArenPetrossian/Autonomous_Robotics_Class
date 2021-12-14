@@ -6,9 +6,9 @@ import os
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-weights = path + "/yolov4_files/yolov4-tiny.weights"
+weights = path + "/yolov4_files/camerabox.weights"
 
-cfg = path + "/yolov4_files/yolov4-camerabox.cfg"
+cfg = path + "/yolov4_files/camerabox.cfg"
 
 data = path + "/yolov4_files/camerabox.data"
 
