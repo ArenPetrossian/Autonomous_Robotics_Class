@@ -1,6 +1,6 @@
-focal_length = 2.97 #mm
-buoy_width = 0.5 #m
-buoy_height = 0.5 #m
+focal_length = 441.524 #mm
+buoy_width = 0.1016 #m    #camerabox
+buoy_height = 0.04572 #m  #camerabox
 FOV_x = 80 #^o
 FOV_y = 64 #^o
 

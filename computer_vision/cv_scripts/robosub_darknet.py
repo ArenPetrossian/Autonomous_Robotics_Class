@@ -10,7 +10,8 @@ from ctypes import *
 import math
 import random
 import os
-
+import parameters
+import math
 
 class BOX(Structure):
     _fields_ = [("x", c_float),
@@ -105,51 +106,43 @@ def load_network(config_file, data_file, weights, batch_size=1):
 '''
     CV TRACKING: Heriberto Gonzalez (gonzo-32)
 '''
-def cv_tracking(xCenter, yCenter):
+def cv_tracking(ObjCenter, ScrCenter, degPpix):
     output = [0,0]
+    xPixError = ObjCenter[0] - ScrCenter[0]
+    yPixError = ObjCenter[1] - ScrCenter[1]
+    xDegError = degPpix[0] * xPixError
+    yDegError = degPpix[1] * yPixError
 
-    if(xCenter < 130):
-        print('|-------- Turn Left:')
-        error  = (xCenter - 130)
-        output[0] = error
+    output[0] = xDegError
+    output[1] = yDegError
 
-    if(xCenter > 150):
-        print('|-------- Turn Right')
-        error  = (xCenter - 150)
-        output[0] = error
-
-    if(yCenter < 130):
-        print('|-------- Turn Up')
-        error  = (130 - yCenter)
-        output[1] = error
-
-    if(yCenter > 150):
-        print('|-------- Turn Down')
-        error  = (xCenter - 150)
-        output[1] = error
-    
     return output
-    
+
 
 '''
     ROS PACKAGE: Heriberto Gonzalez (gonzo-32)
 '''
-def ros_package(detections, coordinates=False):
+def ros_package(detections, ScrCenter, degPpix, coordinates=False):
     output = []
     for label, confidence, bbox in detections:
         x, y, w, h = bbox
-        xCenter = int((x + w) / 2) 
-        yCenter = int((y + h) / 2) 
+        #print bbox
+        #xCenter = int(x + w/2)  ##edited
+        #yCenter = int(y + h/2)  ##edited
+        #apparently x and y are the centers already
+        #         print (xCenter, yCenter)
         if coordinates:
-            errors = cv_tracking(xCenter, yCenter)
-            vert = errors[1]
-            horz = errors[0]
+            errors = cv_tracking([x, y], ScrCenter, degPpix)
+            zDist = parameters.buoy_width * parameters.focal_length / w
+            #print (errors[1])
+            yDist = zDist * math.tan(math.radians(errors[1]))
 
             output.append(label)
             output.append(float(confidence))
-            output.append(vert)
-            output.append(horz)
-            
+            output.append(errors[0])
+            output.append(yDist)
+            output.append(zDist)
+
         return output
 
 
@@ -160,11 +153,12 @@ def draw_boxes(detections, image, colors):
     import cv2
     for label, confidence, bbox in detections:
         left, top, right, bottom = bbox2points(bbox)
-        print(image.shape)
+        #print(image.shape)
         xCenter = int((left + right) / 2) #modified by Heriberto Gonzalez
         yCenter = int((top + bottom) / 2) #modified by Heriberto Gonzalez
         cv2.line(image, (xCenter,yCenter), (xCenter,yCenter), (255,0,0), 5) #modified by Heriberto Gonzalez
         cv2.rectangle(image, (left, top), (right, bottom), colors[label], 1)
+        #print("hey", xCenter, yCenter)
         cv2.putText(image, "{} [{:.2f}]".format(label, float(confidence)),
                     (left, top - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     colors[label], 2)

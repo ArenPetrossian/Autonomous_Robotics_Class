@@ -7,7 +7,8 @@ import robosub_darknet
 import argparse
 import random
 import rospy
-from computer_vision.msg import Cv_data
+from computer_vision.msg import target
+from parameters import *
 
 """
     Modifier: HERIBERTO GONZALEZ (gonzo-32), RICARDO MEDINA ()
@@ -88,9 +89,9 @@ def main(weights, cfg, yoloData):
     '''
         ROS INIT
     '''
-    rospy.init_node('cv_node')
-    cv_pub = rospy.Publisher('cv_pub', Cv_data,queue_size=10)
-    data = Cv_data()
+    rospy.init_node('CV')
+    cv_pub = rospy.Publisher('target', target, queue_size=10)
+    data = target()
 
     '''
         ARGS passing in neccessary files 
@@ -110,7 +111,13 @@ def main(weights, cfg, yoloData):
     # Create one with image we reuse for each detect
     width = robosub_darknet.network_width(network)
     height = robosub_darknet.network_height(network)
+    print (width, height)
     robosub_darknet_image = robosub_darknet.make_image(width, height, 3)
+
+    #aren:
+    ScrCenter = [int(width/2), int(height/2)]
+    degPpix = [(float(FOV_x)/ScrCenter[0]), (float(FOV_y)/ScrCenter[1])]
+    noObjCounter = 9
 
     input_path = str2int(args.input)
     cap = cv2.VideoCapture(input_path)
@@ -138,18 +145,37 @@ def main(weights, cfg, yoloData):
         '''
             ROS OUTPUT
         '''
-        ros_output = robosub_darknet.ros_package(detections, True)
+        #ros_output = robosub_darknet.ros_package(detections, True)
+        ros_output = robosub_darknet.ros_package(detections,ScrCenter,degPpix,True)
+        #obj 1 will be buoy we want to detect, 2 will be other, 3 will be home base
+        if ros_output is not None:
+            noObjCounter = 0
+        elif (noObjCounter < 4):
+            ros_output = prevN, prevC, prevX, prevY, prevD
+            noObjCounter = noObjCounter + 1
         try:
-            data.object = ros_output[0]
-            data.confidence = ros_output[1]
-            data.vertical = ros_output[2]
-            data.horizontal = ros_output[3]
-            cv_pub.publish(data)    
+            if (ros_output[0] == "camera-box"):
+                data.buoy1 = True
+                data.buoy1x = ros_output[2]
+                data.buoy1y = ros_output[3]
+                data.buoy1_distance = ros_output[4]
+            elif (ros_output[0] == "camera-box2"):
+                data.buoy2 = True
+                data.buoy2x = ros_output[2]
+                data.buoy2y = ros_output[3]
+                data.buoy2_distance = ros_output[4]
+            elif (ros_output[0] == "camera-box3"):
+                data.buoy3 = True
+                data.buoy3x = ros_output[2]
+                data.buoy3y = ros_output[3]
+                data.buoy3_distance = ros_output[4]
+            prevN, prevC, prevX, prevY, prevD = ros_output
+            cv_pub.publish(data)
         except:
-            data.object = 'Null'
-            data.confidence = -999
-            data.vertical = -999
-            data.horizontal = -999
+            print "no"
+            data.buoy1 = False
+            data.buoy2 = False
+            data.buoy3 = False
             cv_pub.publish(data)
 
         if not args.dont_show:
