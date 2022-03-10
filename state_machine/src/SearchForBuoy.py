@@ -30,7 +30,7 @@ class SearchForBuoy(smach.State):
 		while not self.sensors_data.stabilized:
 			time.sleep(0.01)
 			self.counter = self.counter + 1
-			if (self.counter > 1500):
+			if (self.counter > 3000): #was originally 15
 				return 'Failed'
 			self.sensors_data = self.sensors_sub.get_data()
 
@@ -45,7 +45,7 @@ class SearchForBuoy(smach.State):
 		while not self.sensors_data.stabilized:
 			time.sleep(0.01)
 			self.counter = self.counter + 1
-			if (self.counter > 1500):
+			if (self.counter > 3000): #was originally 15
 				return 'Failed'
 			self.sensors_data = self.sensors_sub.get_data()
 
@@ -59,7 +59,7 @@ class SearchForBuoy(smach.State):
 		while not self.cv_data.buoy1:
 			time.sleep(0.01)
 			self.counter = self.counter + 1
-			if (self.counter > 2000):
+			if (self.counter > 3000): #was originally 20
 				return 'Failed'
 			self.cv_data = self.cv_sub.get_data()
 

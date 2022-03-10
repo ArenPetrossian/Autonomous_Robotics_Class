@@ -41,7 +41,7 @@ class CenterWithBuoy(smach.State):
 				#Center 1 meter from the Buoy
 				self.task.distance_set = self.cv_data.buoy1_distance - 1
 				self.smach_pub.publish(self.task)
-				if (abs(self.cv_data.buoy1_distance) < 0.1524):
+				if (abs(self.cv_data.buoy1_distance) < 0.4):  #changed 0.4 <- .1524
 					self.task.distance_set = 0
 					self.smach_pub.publish(self.task)
 					if (self.sensors_data.stabilized):

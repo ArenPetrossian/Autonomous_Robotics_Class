@@ -10,7 +10,7 @@ from Subscriber import Subscribe_to
 class Surface(smach.State):
 	def __init__(self):
 		print("surfacing")
-		smach.State.__init__(self, outcomes=['Success', 'Failed'])
+		smach.State.__init__(self, outcomes=['Success'])
 		self.smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 		self.task = task_desiredAction()
 		time.sleep(0.1)
@@ -28,8 +28,7 @@ def code():
         rospy.init_node('sm')
         main = smach.StateMachine(outcomes=['Done', 'Not_Done'])
         with main:
-                smach.StateMachine.add('Surface', Surface(), transitions={ 'Success':'Done',
-										'Failed':'Not_Done'})
+                smach.StateMachine.add('Surface', Surface(), transitions={'Success':'Done'})
 
         sis = smach_ros.IntrospectionServer('server', main, '/tester')
         sis.start()
