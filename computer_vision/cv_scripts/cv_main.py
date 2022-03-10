@@ -92,7 +92,6 @@ def main(weights, cfg, yoloData):
     rospy.init_node('CV')
     cv_pub = rospy.Publisher('target', target, queue_size=10)
     data = target()
-
     '''
         ARGS passing in neccessary files 
     '''
@@ -113,11 +112,11 @@ def main(weights, cfg, yoloData):
     height = robosub_darknet.network_height(network)
     print (width, height)
     robosub_darknet_image = robosub_darknet.make_image(width, height, 3)
-
     #aren:
     ScrCenter = [int(width/2), int(height/2)]
     degPpix = [(float(FOV_x)/ScrCenter[0]), (float(FOV_y)/ScrCenter[1])]
     noObjCounter = 9
+    firstLoop = True
 
     input_path = str2int(args.input)
     cap = cv2.VideoCapture(input_path)
@@ -140,6 +139,9 @@ def main(weights, cfg, yoloData):
         if args.out_filename is not None:
             video.write(image)
         fps = int(1/(time.time() - prev_time))
+        if firstLoop:
+            fps = 10
+            firstLoop = False
         print("FPS: {}".format(fps))
 
         '''
@@ -147,6 +149,7 @@ def main(weights, cfg, yoloData):
         '''
         #ros_output = robosub_darknet.ros_package(detections, True)
         ros_output = robosub_darknet.ros_package(detections,ScrCenter,degPpix,True)
+	print (ros_output)
         #obj 1 will be buoy we want to detect, 2 will be other, 3 will be home base
         if ros_output is not None:
             noObjCounter = 0
@@ -181,7 +184,6 @@ def main(weights, cfg, yoloData):
         if not args.dont_show:
             cv2.imshow('Inference', image)
             cv2.waitKey(fps)
-            
         k = cv2.waitKey(10) & 0xFF
         if k == 27:
             break
