@@ -13,6 +13,7 @@ from Subscriber import Subscribe_to
 from Initialize_Robot import Initialize_Robot
 from SearchForBuoy import SearchForBuoy
 from CenterWithBuoy import CenterWithBuoy
+from LostBuoy import LostBuoy
 from BumpIntoBuoy import BumpIntoBuoy
 from SearchForBase import SearchForBase
 from Surface import Surface
@@ -25,7 +26,8 @@ def the_loop():
 	with my_machine:
 		smach.StateMachine.add('Initialize_Robot', Initialize_Robot(), transitions={'Success':'SearchForBuoy', 'Failed':'Surface'})
 		smach.StateMachine.add('SearchForBuoy', SearchForBuoy(), transitions={'Success':'CenterWithBuoy', 'Failed':'Surface'})
-		smach.StateMachine.add('CenterWithBuoy', CenterWithBuoy(), transitions={'Success':'BumpIntoBuoy', 'Failed':'Surface'})
+		smach.StateMachine.add('CenterWithBuoy', CenterWithBuoy(), transitions={'Success':'BumpIntoBuoy', 'Lost':'LostBuoy', 'Failed':'Surface'})
+		smach.StateMachine.add('LostBuoy', LostBuoy(), transitions={'Success':'CenterWithBuoy', 'Failed':'Surface'})
 		smach.StateMachine.add('BumpIntoBuoy', BumpIntoBuoy(), transitions={'Success':'SearchForBase', 'Failed':'Surface'})
 		smach.StateMachine.add('SearchForBase', SearchForBase(), transitions={'Success':'Surface', 'Failed':'Surface'})
 		smach.StateMachine.add('Surface', Surface(), transitions={'Success':'StopRobot'})

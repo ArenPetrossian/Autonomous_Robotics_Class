@@ -12,7 +12,7 @@ from Subscriber import Subscribe_to
 class CenterWithBuoy(smach.State):
 	def __init__(self):
 		print("centering")
-		smach.State.__init__(self, outcomes=['Success', 'Failed'])
+		smach.State.__init__(self, outcomes=['Success', 'Lost', 'Failed'])
 		self.smach_pub = rospy.Publisher('task_desiredAction', task_desiredAction, queue_size=10)
 		self.cv_sub = Subscribe_to('target')
 		self.sensors_sub = Subscribe_to('sensorInfo_actuatorStatus')
@@ -50,7 +50,7 @@ class CenterWithBuoy(smach.State):
 			time.sleep(0.01)
 			if (self.counter > 6000):
 				return 'Failed'
-		return 'Failed'
+		return 'Lost'
 
 	def center(self):
 		self.task.yaw_set = self.cv_data.buoy1x
@@ -63,10 +63,10 @@ class CenterWithBuoy(smach.State):
 
 def code():
         rospy.init_node('sm')
-        main = smach.StateMachine(outcomes=['Done', 'Not_Done'])
+        main = smach.StateMachine(outcomes=['Done', 'Not_Done', 'Sorta_Done'])
         with main:
                 smach.StateMachine.add('CenterWithBuoy', CenterWithBuoy(), transitions={ 'Success':'Done',
-										'Failed':'Not_Done'})
+							'Lost':'Sorta_Done', 'Failed':'Not_Done'})
 
         sis = smach_ros.IntrospectionServer('server', main, '/tester')
         sis.start()
