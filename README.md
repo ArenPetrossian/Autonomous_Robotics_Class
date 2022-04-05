@@ -7,6 +7,7 @@
 3. sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 4. sudo apt install curl
 5. curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+6. sudo apt update
 7. sudo apt install ros-melodic-desktop
 8. echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 9. source ~/.bashrc
@@ -86,11 +87,11 @@
 1. cd ~
 2. wget https://downloads.arduino.cc/arduino-1.8.19-linuxaarch64.tar.xz
 3. tar -xf arduino-1.8.19-linuxaarch64.tar.xz
-4. cd arduino-1.8.19-linuxaarch64/
+4. cd arduino-1.8.19/
 5. sudo bash install.sh
 6. sudo apt-get install ros-melodic-rosserial-arduino
 7. sudo apt-get install ros-melodic-rosserial
-8. rosrun rosserial_arduino make_libraries ~/Arduino/libraries
+8. rosrun rosserial_arduino make_libraries.py ~/Arduino/libraries
 9. *Open Arduino IDE on Desktop:*
 	* *In Library Manager Install:*
 		* "PID" by Brett Beauregard
@@ -102,15 +103,14 @@
 ---
 ## How to Run and View all Nodes
 
-1. cd ~/ai_class_ws/src/launchers/  
-
-2. *Choose an Option to Run Nodes:*
+1. cd ~/ai_class_ws/src/launchers/
+2. chmod +x ../computer_vision/src/cv_node.py ../graphical_user_interface/src/gui_node.py ../guidance_navigation_control/src/gnc_node.py ../sensing_and_actuation/src/sensorActuator_node.py ../state_machine/src/smach_node.py
+3. *Choose an Option to Run Nodes:*
 	* *Option 1: (Multiple Terminals)*
 		* bash node_launcher.bash   
 	* *Option 2: (Single Terminal)*
 		* roslaunch node_launcher.launch
-
-2. *In a new terminal:*  
+4. *In a new terminal:*  
 	* rosrun rqt_graph rqt_graph   
 
 
