@@ -16,6 +16,8 @@ class Surface(smach.State):
 		time.sleep(0.1)
 
 	def execute(self, userdata):
+		self.task.currentState = "Surface"
+                self.smach_pub.publish(self.task)
 		#Need bool since depth adds to current not absolute
 		self.task.surface = True
 		self.smach_pub.publish(self.task)

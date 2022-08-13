@@ -22,6 +22,8 @@ class CenterWithBuoy(smach.State):
 		time.sleep(0.1)
 
 	def execute(self, userdata):
+		self.task.currentState = "Center: Buoy"
+                self.smach_pub.publish(self.task)
 		self.cv_data = self.cv_sub.get_data()
 		while self.cv_data.buoy1:
 			self.cv_data = self.cv_sub.get_data()

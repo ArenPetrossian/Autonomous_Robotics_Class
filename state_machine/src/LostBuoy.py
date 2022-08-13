@@ -20,6 +20,8 @@ class LostBuoy(smach.State):
 		time.sleep(0.1)
 
 	def execute(self, userdata):
+		self.task.currentState = "Lost: Buoy"
+                self.smach_pub.publish(self.task)
 		#maintain current position
 		self.task.yaw_set, self.task.depth_set, self.task.distance_set = 0, 0, 0
 		self.smach_pub.publish(self.task)

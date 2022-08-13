@@ -21,6 +21,8 @@ class SearchForBuoy(smach.State):
 		time.sleep(2)
 
 	def execute(self, userdata):
+		self.task.currentState = "Search: Buoy"
+		self.smach_pub.publish(self.task)
 		#Assume Robot starts with all setpoints at 0
 		print("Dive")
 		self.task.depth_set = 1
