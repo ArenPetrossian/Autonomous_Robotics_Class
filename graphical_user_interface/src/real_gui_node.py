@@ -175,7 +175,7 @@ class myGUI():
         self.sensorRoll.set(value=str(data.roll_current))
         self.sensorDepth.set(value=str(data.depth_current))
         self.sensorTemp.set(value=str(data.temperature))
-        if not data.stabilized:
+        if data.stabilized_time == 0:
             self.sensorStabilized.set(value=str(int(time.time() - self.lastStab)) + "s ago")
         else:
             self.lastStab = time.time()
