@@ -254,7 +254,7 @@ void Barometer_Reading() {
 
 //Updates Variables for Publisher 
 void Publisher_data() {
-  final_message.stabilized = isStabilized();
+  final_message.stabilized_time = isStabilized();
   final_message.yaw_current = X_angle_input;
   final_message.pitch_current = Y_angle_input;
   final_message.roll_current = Z_angle_input;
@@ -271,18 +271,15 @@ void Publisher_data() {
 
 
 //Checks if Robot is Stabilized
-bool isStabilized() {
+uint16_t isStabilized() {
   if ((abs(X_angle_setpoint - X_angle_input) < 5) && (abs(Y_angle_setpoint - Y_angle_input) < 5) &&
       (abs(Z_angle_setpoint - Z_angle_input) < 5) && (abs(barometer_setpoint - barometer_input) < 0.1524) &&
       (H_distance_setpoint == 0)) 
       {
-        if ((millis() - lastUnstable) > 3000) {
-          return true;
-        }
-        return false;
+          return ((millis() - lastUnstable) / 1000);
       }
   lastUnstable = millis();
-  return false;
+  return 0;
 }
 
 
